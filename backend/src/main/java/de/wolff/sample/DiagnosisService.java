@@ -13,32 +13,28 @@ import java.util.List;
 import java.util.Map;
 
 @Stateful
-public class DiagnosisService {
+public class DiagnosisService extends PatientService.PatientSubResource{
 
     @PersistenceContext
     private EntityManager em;
 
     private long patientId;
 
-    public void setPatientId(long patientId){
-        this.patientId = patientId;
-    }
-
     @GET
     public PatientEntity getDiagnoses(){
-        return em.find(PatientEntity.class, patientId);
+        return em.find(PatientEntity.class, getPatientId());
     }
 
     @POST
     public void addDiagnosis(DiagnosisValue diagnosis) {
-        PatientEntity patient = em.find(PatientEntity.class, patientId);
+        PatientEntity patient = em.find(PatientEntity.class, getPatientId());
         patient.getDiagnoses().add(diagnosis);
         em.merge(patient);
     }
 
     @PUT
     public void updateDiagnosis(List<DiagnosisValue> diagnoses){
-        PatientEntity patient = em.find(PatientEntity.class, patientId);
+        PatientEntity patient = em.find(PatientEntity.class, getPatientId());
         patient.setDiagnoses(diagnoses);
         em.merge(patientId);
     }

@@ -10,33 +10,26 @@ import javax.ws.rs.*;
 import java.util.List;
 
 @Stateful
-public class MedicationService {
+public class MedicationService extends PatientService.PatientSubResource{
 
     @PersistenceContext
     private EntityManager em;
 
-    private long patientId;
-
-    public void setPatient(long patientId) {
-        this.patientId = patientId;
-    }
-
     @GET
     public PatientEntity getMedications(){
-
-        return em.find(PatientEntity.class, patientId);
+        return em.find(PatientEntity.class, getPatientId());
     }
 
     @POST
     public void addMedication(MedicationValue medication){
-        PatientEntity patient = em.find(PatientEntity.class, patientId);
+        PatientEntity patient = em.find(PatientEntity.class, getPatientId());
         patient.getMedications().add(medication);
         em.merge(patient);
     }
 
     @PUT
     public void updateMedication(List<MedicationValue> medications){
-        PatientEntity patient = em.find(PatientEntity.class, patientId);
+        PatientEntity patient = em.find(PatientEntity.class, getPatientId());
         patient.setMedications(medications);
         em.merge(patient);
     }

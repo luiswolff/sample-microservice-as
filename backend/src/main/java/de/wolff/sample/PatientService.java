@@ -56,24 +56,35 @@ public class PatientService {
     }
 
     @Path("{patientId}/medications")
-    public MedicationService getMedicationService(@PathParam("patientId") long patientId){
+    public PatientSubResource getMedicationService(@PathParam("patientId") long patientId){
+        return getSubResource(patientId, "java:module/MedicationService");
+    }
+
+    @Path("{patientId}/diagnoses")
+    public PatientSubResource getDiagnosisService(@PathParam("patientId") long patientId){
+        return getSubResource(patientId, "java:module/DiagnosisService");
+    }
+
+    private PatientSubResource getSubResource(long patientId, String jndiName){
         try {
-            MedicationService medicationService = InitialContext.doLookup("java:module/MedicationService");
-            medicationService.setPatient(patientId);
-            return medicationService;
+            PatientSubResource subResource = InitialContext.doLookup(jndiName);
+            subResource.setPatientId(patientId);
+            return subResource;
         } catch (NamingException e){
             throw new EJBException(e);
         }
     }
 
-    @Path("{patientId}/diagnoses")
-    public DiagnosisService getDiagnosisService(@PathParam("patientId") long patientId){
-        try {
-            DiagnosisService diagnosisService = InitialContext.doLookup("java:module/DiagnosisService");
-            diagnosisService.setPatientId(patientId);
-            return diagnosisService;
-        } catch (NamingException e){
-            throw new EJBException(e);
+    public static abstract class PatientSubResource{
+
+        private long patientId;
+
+        public long getPatientId() {
+            return patientId;
+        }
+
+        public void setPatientId(long patientId) {
+            this.patientId = patientId;
         }
     }
 }
