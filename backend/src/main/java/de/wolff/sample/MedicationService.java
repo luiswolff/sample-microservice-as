@@ -1,6 +1,6 @@
 package de.wolff.sample;
 
-import de.wolff.sample.entities.MedicationEntity;
+import de.wolff.sample.entities.MedicationValue;
 import de.wolff.sample.entities.PatientEntity;
 
 import javax.ejb.Stateful;
@@ -28,14 +28,14 @@ public class MedicationService {
     }
 
     @POST
-    public void addMedication(MedicationEntity medication){
+    public void addMedication(MedicationValue medication){
         PatientEntity patient = em.find(PatientEntity.class, patientId);
         patient.getMedications().add(medication);
         em.merge(patient);
     }
 
     @PUT
-    public void updateMedication(List<MedicationEntity> medications){
+    public void updateMedication(List<MedicationValue> medications){
         PatientEntity patient = em.find(PatientEntity.class, patientId);
         patient.setMedications(medications);
         em.merge(patient);

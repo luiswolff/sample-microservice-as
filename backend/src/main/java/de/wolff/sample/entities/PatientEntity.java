@@ -34,12 +34,12 @@ public class PatientEntity {
             joinColumns=@JoinColumn(name="patient_id")
     )
     @OrderBy("since, name")
-    private List<MedicationEntity> medications;
+    private List<MedicationValue> medications;
 
     public PatientEntity() {
     }
 
-    public PatientEntity(Gender gender, Date birthday, List<DiagnosisValue> diagnoses, List<MedicationEntity> medications) {
+    public PatientEntity(Gender gender, Date birthday, List<DiagnosisValue> diagnoses, List<MedicationValue> medications) {
         this.gender = gender;
         this.birthday = birthday;
         this.diagnoses = diagnoses;
@@ -78,11 +78,11 @@ public class PatientEntity {
         this.diagnoses = diagnoses;
     }
 
-    public List<MedicationEntity> getMedications() {
+    public List<MedicationValue> getMedications() {
         return medications;
     }
 
-    public void setMedications(List<MedicationEntity> medications) {
+    public void setMedications(List<MedicationValue> medications) {
         this.medications = medications;
     }
 

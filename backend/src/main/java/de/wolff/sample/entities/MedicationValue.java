@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Embeddable
-public class MedicationEntity {
+public class MedicationValue {
 
     @Temporal(TemporalType.DATE)
     private Date since;
@@ -24,7 +24,7 @@ public class MedicationEntity {
 
     private String atc;
 
-    public MedicationEntity(Date since, Date until, String name, String activeIngredient, double dose, String unit, String pzn, String atc) {
+    public MedicationValue(Date since, Date until, String name, String activeIngredient, double dose, String unit, String pzn, String atc) {
         this.since = since;
         this.until = until;
         this.name = name;
@@ -35,7 +35,7 @@ public class MedicationEntity {
         this.atc = atc;
     }
 
-    public MedicationEntity() {
+    public MedicationValue() {
 
     }
 
