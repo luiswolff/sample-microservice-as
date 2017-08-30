@@ -48,7 +48,7 @@ public class PatientService {
 
     @DELETE
     @Path("{patientId}")
-    public void deletepatient(@PathParam("patientId") long patientId){
+    public void deletePatient(@PathParam("patientId") long patientId){
         PatientEntity patient = em.getReference(PatientEntity.class, patientId);
         if (patient != null){
             em.remove(patient);
@@ -75,6 +75,7 @@ public class PatientService {
         }
     }
 
+    @SuppressWarnings("WeakerAccess")
     public static abstract class PatientSubResource{
 
         private long patientId;
