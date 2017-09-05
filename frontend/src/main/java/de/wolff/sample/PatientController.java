@@ -5,6 +5,7 @@ import de.wolff.sample.model.*;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.ejb.*;
+import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.client.*;
 import javax.ws.rs.core.*;
@@ -65,7 +66,7 @@ public class PatientController {
 
     @POST
     @Path("createPatient.html")
-    public Response createPatient(@BeanParam Patient patient){
+    public Response createPatient(@BeanParam @Valid Patient patient){
         StatusType status = backend.path("patients")
                 .request()
                 .post(Entity.entity(patient, MediaType.APPLICATION_JSON))
@@ -86,7 +87,8 @@ public class PatientController {
 
     @POST
     @Path("{patientId}/edit.html")
-    public Response updatePatient(@PathParam("patientId") long patientId, @BeanParam Patient patient){
+    public Response updatePatient(@PathParam("patientId") long patientId,
+                                  @BeanParam @Valid Patient patient){
         StatusType status = backend.path("patients/" + patientId)
                 .request()
                 .put(Entity.entity(patient, MediaType.APPLICATION_JSON))
@@ -115,7 +117,8 @@ public class PatientController {
 
     @POST
     @Path("{patientId}/diagnoses/add")
-    public Response addDiagnoses(@PathParam("patientId") long patientId, @BeanParam Diagnosis diagnosis){
+    public Response addDiagnoses(@PathParam("patientId") long patientId,
+                                 @BeanParam @Valid Diagnosis diagnosis){
         StatusType status = backend.path("patients/" + patientId + "/diagnoses")
                 .request()
                 .post(Entity.json(diagnosis))
@@ -144,7 +147,8 @@ public class PatientController {
 
     @POST
     @Path("{patientId}/medications/add")
-    public Response addMedication(@PathParam("patientId") long patientId, @BeanParam Medication medication){
+    public Response addMedication(@PathParam("patientId") long patientId,
+                                  @BeanParam @Valid Medication medication){
         StatusType status = backend.path("patients/" + patientId + "/medications")
                 .request()
                 .post(Entity.json(medication))

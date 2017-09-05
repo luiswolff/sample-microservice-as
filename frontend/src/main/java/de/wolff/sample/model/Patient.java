@@ -1,9 +1,12 @@
 package de.wolff.sample.model;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Past;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
+import javax.validation.executable.ValidateOnExecution;
 import javax.ws.rs.FormParam;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.*;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -17,6 +20,8 @@ public class Patient {
     private long id;
 
     @FormParam("gender")
+    @Pattern(regexp = "[mM]|[fF]")
+    @Size(min = 1, max = 1)
     private String gender;
 
     private Date birthday;
@@ -41,6 +46,8 @@ public class Patient {
         this.gender = gender;
     }
 
+    @Past
+    @ValidateOnExecution
     public Date getBirthday() {
         return birthday;
     }
@@ -67,7 +74,6 @@ public class Patient {
 
     @FormParam("birthday")
     public void setBirthdayAsDate(String birthday) throws ParseException{
-        DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        this.birthday = format.parse(birthday);
+        this.birthday = Util.dateFromWWWForm(birthday);
     }
 }
