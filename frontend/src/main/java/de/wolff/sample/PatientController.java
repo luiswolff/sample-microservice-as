@@ -5,6 +5,7 @@ import de.wolff.sample.model.*;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.ejb.*;
+import javax.json.JsonArray;
 import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.client.*;
@@ -39,11 +40,17 @@ public class PatientController {
     }
 
     @GET
+    @Path("/")
+    public Viewable welcomeContent(){
+        return allPatients();
+    }
+
+    @GET
     @Path("patients.html")
     public Viewable allPatients(){
-        List<Patient> patients = backend.path("patients")
+        JsonArray patients = backend.path("patients")
                 .request(MediaType.APPLICATION_JSON)
-                .get(new GenericType<List<Patient>>(){});
+                .get(JsonArray.class);
         return new Viewable("/WEB-INF/pages/all_patients.jsp", patients);
     }
 

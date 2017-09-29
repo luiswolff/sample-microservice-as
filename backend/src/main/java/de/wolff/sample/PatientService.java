@@ -4,13 +4,19 @@ import de.wolff.sample.entities.PatientEntity;
 
 import javax.ejb.EJBException;
 import javax.ejb.Stateless;
+import javax.json.Json;
+import javax.json.JsonArray;
+import javax.json.JsonArrayBuilder;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.stream.Collector;
 
 @Stateless
 @Path("/patients")
@@ -21,9 +27,27 @@ public class PatientService {
     @PersistenceContext
     private EntityManager em;
 
+    private DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ssXXX");
+
     @GET
-    public List<PatientEntity> loadPatients(){
-        return em.createQuery("select p from patients p", PatientEntity.class).getResultList();
+    public JsonArray loadPatients(){
+        List<PatientEntity> patients = em.createQuery("select p from patients p", PatientEntity.class)
+                .getResultList();
+        return patients.stream()
+                .map(p -> Json.createObjectBuilder()
+                        .add("id", p.getId())
+                        .add("gender", String.valueOf(p.getGender()))
+                        .add("birthday", df.format(p.getBirthday()))
+                        .add("countDiagnoses", p.getDiagnoses().size())
+                        .add("countMedications", p.getMedications().size())
+                        .build())
+                .collect(Collector.of(
+                        Json::createArrayBuilder,
+                        JsonArrayBuilder::add,
+                        (jsonArrayBuilder, jsonArrayBuilder2) -> {
+                            jsonArrayBuilder2.build().forEach(jsonArrayBuilder::add);
+                            return jsonArrayBuilder;},
+                        JsonArrayBuilder::build));
     }
 
     @POST

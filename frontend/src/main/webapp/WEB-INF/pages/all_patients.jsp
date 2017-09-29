@@ -26,15 +26,16 @@
             </tr>
         </thead>
         <tbody>
-            <%--@elvariable id="model" type="java.util.List"--%>
-            <%--@elvariable id="patient" type="de.wolff.sample.model.Patient"--%>
+            <%--@elvariable id="model" type="javax.json.JsonArray"--%>
+            <%--@elvariable id="patient" type="javax.json.JsonObject"--%>
             <c:forEach var="patient" items="${model}">
                 <tr>
                     <td><a href="${pageContext.request.contextPath}/${patient.id}/edit.html">${patient.id}</a></td>
-                    <td>${patient.gender == 'M' ? 'Male' : 'Female'}</td>
-                    <td><fmt:formatDate value="${patient.birthday}" pattern="yyyy" /></td>
-                    <td><a href="${pageContext.request.contextPath}/${patient.id}/diagnoses.html"><fmt:formatNumber value="${patient.diagnoses.size()}" /></a></td>
-                    <td><a href="${pageContext.request.contextPath}/${patient.id}/medications.html"><fmt:formatNumber value="${patient.medications.size()}" /></a></td>
+                    <td>${patient.getString('gender') == 'M' ? 'Male' : 'Female'}</td>
+                    <fmt:parseDate value="${patient.getString('birthday')}" var="birthday" pattern="yyyy-MM-dd'T'hh:mm:ss" />
+                    <td><fmt:formatDate value="${birthday}" pattern="yyyy" /></td>
+                    <td><a href="${pageContext.request.contextPath}/${patient.id}/diagnoses.html"><fmt:formatNumber value="${patient.getInt('countDiagnoses')}" /></a></td>
+                    <td><a href="${pageContext.request.contextPath}/${patient.id}/medications.html"><fmt:formatNumber value="${patient.getInt('countMedications')}" /></a></td>
                 </tr>
             </c:forEach>
         </tbody>

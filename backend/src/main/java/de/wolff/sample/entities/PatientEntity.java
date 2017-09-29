@@ -20,7 +20,7 @@ public class PatientEntity {
     @Temporal(TemporalType.DATE)
     private Date birthday;
 
-    @ElementCollection(fetch = FetchType.EAGER)
+    @ElementCollection
     @CollectionTable(
             name="diagnoses",
             joinColumns=@JoinColumn(name="patient_id")
@@ -28,7 +28,7 @@ public class PatientEntity {
     @OrderBy("date, diagnosis")
     private List<DiagnosisValue> diagnoses;
 
-    @ElementCollection(fetch = FetchType.EAGER)
+    @ElementCollection
     @CollectionTable(
             name="medications",
             joinColumns=@JoinColumn(name="patient_id")
